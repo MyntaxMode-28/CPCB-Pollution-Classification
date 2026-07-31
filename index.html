@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPCB Classification of Industrial Sectors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="ledger">
+
+  <aside class="casefile">
+    <div class="casefile-head">
+      <span class="seal">CPCB</span>
+      <h1>Classification of<br>Industrial Sectors</h1>
+      <p class="subtitle">Sector &amp; Activity Assessment</p>
+    </div>
+
+    <ol class="steps" id="steps">
+      <li data-step="search" class="active">
+        <span class="step-num">01</span>
+        <span class="step-label">Sector Search</span>
+      </li>
+      <li data-step="qflow">
+        <span class="step-num">02</span>
+        <span class="step-label">Q-Flow Assessment</span>
+      </li>
+      <li data-step="result">
+        <span class="step-num">03</span>
+        <span class="step-label">Classification</span>
+      </li>
+      <li data-step="ec">
+        <span class="step-num">04</span>
+        <span class="step-label">EC Estimate</span>
+      </li>
+      <li data-step="consent">
+        <span class="step-num">05</span>
+        <span class="step-label">CTE/CTO Fee</span>
+      </li>
+    </ol>
+
+    <div class="casefile-foot">
+      <button id="reset-btn" class="ghost-btn">＋ New Assessment</button>
+    </div>
+  </aside>
+
+  <main class="workspace">
+
+    <section id="panel-search" class="panel active">
+      <div class="panel-eyebrow">Entry 01</div>
+      <h2>Search sector or activity</h2>
+      <p class="hint">Enter the sector name, e.g. "internet cafe", "bakery", "sponge iron with CPP".</p>
+      <form id="search-form" class="search-row">
+        <input type="text" id="search-input" placeholder="Type a sector or activity…" autocomplete="off" required>
+        <button type="submit">Search</button>
+      </form>
+      <div id="search-results" class="results-list"></div>
+      <button id="goto-qflow" class="link-btn">Skip search — run Q-Flow assessment instead →</button>
+    </section>
+
+    <section id="panel-qflow" class="panel">
+      <div class="panel-eyebrow">Entry 02</div>
+      <h2>Q-Flow assessment</h2>
+      <label class="qflow-name-label">Sector / activity name (shown on your final result)
+        <input type="text" id="qflow-sector-name" class="qflow-name-input"
+               placeholder="e.g. Textile Dyeing Unit, ABC Industries">
+      </label>
+      <div id="qflow-body"></div>
+    </section>
+
+    <section id="panel-result" class="panel">
+      <div class="panel-eyebrow">Entry 03</div>
+      <h2>Classification result</h2>
+      <div id="result-body"></div>
+    </section>
+
+    <section id="panel-ec" class="panel">
+      <div class="panel-eyebrow">Entry 04 — Optional</div>
+      <h2>Environmental Compensation estimate</h2>
+      <p class="hint">Only complete this if the unit is exceeding permitted emission/discharge limits.</p>
+      <form id="ec-form" class="form-grid">
+        <label>Category
+          <select id="ec-category">
+            <option value="Red">Red</option>
+            <option value="Orange">Orange</option>
+            <option value="Green">Green</option>
+          </select>
+        </label>
+        <label>Days of violation
+          <input type="number" id="ec-days" min="1" value="1" required>
+        </label>
+        <label>Scale of operation
+          <select id="ec-scale">
+            <option value="micro_small">Micro / Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+          </select>
+        </label>
+        <label>Nearest city population
+          <select id="ec-location">
+            <option value="lt_1m">Less than 1 million</option>
+            <option value="1_5m">1 to 5 million</option>
+            <option value="5_10m">5 to 10 million</option>
+            <option value="gte_10m">10 million and above</option>
+            <option value="gt_10km_boundary">More than 10km from municipal boundary</option>
+          </select>
+        </label>
+        <label>Repeat violation status
+          <select id="ec-repeat">
+            <option value="first">First violation</option>
+            <option value="rep1">1st repetition</option>
+            <option value="rep2">2nd repetition</option>
+            <option value="rep3plus">3rd or more</option>
+          </select>
+        </label>
+        <label>Rupee factor (R) — CPCB permits ₹100–500
+          <input type="number" id="ec-r-factor" min="100" max="500" step="1" value="250">
+        </label>
+        <button type="submit" class="primary-btn">Calculate EC</button>
+      </form>
+      <div id="ec-body"></div>
+    </section>
+
+    <section id="panel-consent" class="panel">
+      <div class="panel-eyebrow">Entry 05 — Optional</div>
+      <h2>CTE / CTO consent fee</h2>
+      <p class="hint">Based on capital investment and category (CF = CI × Scale Factor × Pollution Index Factor).</p>
+      <form id="consent-form" class="form-grid">
+        <label>Category
+          <select id="consent-category">
+            <option value="Red">Red</option>
+            <option value="Orange">Orange</option>
+            <option value="Green">Green</option>
+          </select>
+        </label>
+        <label>Capital investment (₹)
+          <input type="number" id="consent-capital" min="1" placeholder="e.g. 150000000" required>
+        </label>
+        <button type="submit" class="primary-btn">Calculate Fee</button>
+      </form>
+      <div id="consent-body"></div>
+    </section>
+
+  </main>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
