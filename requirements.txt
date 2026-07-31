@@ -1,0 +1,5 @@
+flask
+rapidfuzz
+openpyxl
+pandas
+requests
